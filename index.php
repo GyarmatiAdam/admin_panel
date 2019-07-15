@@ -10,18 +10,18 @@ if(isset($_SESSION['user'])!="") {
 }
 
 $error = false;
-$passwordError = "";
+$passError = "";
 $emailError = "";
 if(isset($_POST['login'])) {
 
   
- $email = trim(isset($_POST['email']));
+ $email = trim($_POST['email']);
  $email = strip_tags($email);
  $email = htmlspecialchars($email);
 
- $password = trim(isset($_POST['password']));
- $password = strip_tags($password);
- $password = htmlspecialchars($password);
+ $pass = trim($_POST['pass']);
+ $pass = strip_tags($pass);
+ $pass = htmlspecialchars($pass);
 
  if(empty($email)){
   $error = true;
@@ -31,21 +31,21 @@ if(isset($_POST['login'])) {
   $emailError = "Please enter valid email address.";
  }
 
- if (empty($password)){
+ if (empty($pass)){
   $error = true;
-  $passwordError = "Please enter your password." ;
+  $passError = "Please enter your pass." ;
  }
 
  if (!$error) {
   
-  $passwordhash = hash('sha256', $password);
+  $passhash = hash('sha256', $pass);
 
-  $res=mysqli_query($connenct, "SELECT user_id, username, `password` FROM users WHERE email='$email'");
+  $res=mysqli_query($connect, "SELECT user_id, username, `pass` FROM users WHERE email='$email'");
   $row=mysqli_fetch_array($res, MYSQLI_ASSOC);
   $count = mysqli_num_rows($res);
-  echo $passwordhash."<br>";
-  echo $row["password"];
-  if( $count == 1 && $row['password'] == $passwordhash ) {
+  echo $passhash."<br>";
+  echo $row["pass"];
+  if( $count == 1 && $row['pass'] == $passhash ) {
    $_SESSION['user'] = $row['user_id'];
    header("Location: home.php");
   } else {
@@ -86,13 +86,13 @@ if(isset($_POST['login'])) {
         <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" autocomplete="off">
             <div class="form-group">
                 <label for="email">Email address</label>
-                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter email">
                 <span class ="text-danger"><?= $emailError ?></span>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password">
-                <span class ="text-danger"><?= $passwordError ?></span>
+                <label for="password">pass</label>
+                <input type="password"  name="pass" class="form-control" placeholder="password">
+                <span class ="text-danger"><?= $passError ?></span>
             </div>
 
             <button type="submit" value="login" name="login" class="btn btn-primary">Login</button>

@@ -9,7 +9,7 @@ if(isset($_SESSION['user'])!=""){
 include_once "dbconnection.php";
 
     $error = false;
-    $passwordError = "";
+    $passError = "";
     $emailError = "";
     $lastNameError = "";
     $firstNameError = "";
@@ -29,9 +29,9 @@ include_once "dbconnection.php";
     $email = strip_tags($email);
     $email = htmlspecialchars($email);
 
-    $password = trim($_POST['password']);
-    $password = strip_tags($password);
-    $password = htmlspecialchars($password);
+    $pass = trim($_POST['pass']);
+    $pass = strip_tags($pass);
+    $pass = htmlspecialchars($pass);
 
   // basic name validation
 if (empty($firstName)) {
@@ -71,23 +71,23 @@ if (!filter_var($email,FILTER_VALIDATE_EMAIL)) {
   }
  }
 
- // password validation
-if (empty($password)){
+ // pass validation
+if (empty($pass)){
   $error = true;
-  $passwordError = "Please enter password.";
- } else if(strlen($password) < 6) {
+  $passError = "Please enter pass.";
+ } else if(strlen($pass) < 6) {
   $error = true;
-  $passwordError = "Password must have atleast 6 characters.";
+  $passError = "pass must have atleast 6 characters.";
 }
 
- // password hashing for security
-$passwordhash = hash('sha256', $password);
+ // pass hashing for security
+$passhash = hash('sha256', $pass);
 
 
  // if there's no error, continue to signup
 if( !$error ) {
   
-  $query = "INSERT INTO users(firstName, lastName, email, password) VALUES('$firstName', '$lastName', '$email', '$passwordhash')";
+  $query = "INSERT INTO users(firstName, lastName, email, pass) VALUES('$firstName', '$lastName', '$email', '$passhash')";
   $res = mysqli_query($connect, $query);
   
 if ($res) {
@@ -96,8 +96,11 @@ if ($res) {
     unset($firstName);
     unset($lastName);
     unset($email);
-    unset($password);
-  } else  {
+    unset($pass);
+  }
+  elseif(isset($_SESSION['user'])!=""){
+    header("Location: index.php");
+   } else  {
    $errTyp = "danger";
    $errMSG = "Something went wrong, try again later..." ;
   }
@@ -156,9 +159,9 @@ if ($res) {
                 <span class="text-danger"><?= $emailError ?></span>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-                <span class ="text-danger"><?= $passwordError ?></span>
+                <label for="pass">pass</label>
+                <input type="pass" class="form-control" name="pass" id="pass" placeholder="pass">
+                <span class ="text-danger"><?= $passError ?></span>
             </div>
 
             <button type="submit" value="register" name="register" class="btn btn-primary">Register</button>
