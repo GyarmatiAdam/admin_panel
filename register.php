@@ -2,16 +2,20 @@
 ob_start();
 session_start();
 
-if( isset($_SESSION['user'])!="" ){
- header("Location: index.php" );
+if(isset($_SESSION['user'])!=""){
+ header("Location: home.php");
 }
 
-    include_once "dbconnection.php";
+include_once "dbconnection.php";
 
     $error = false;
+    $passwordError = "";
+    $emailError = "";
+    $lastNameError = "";
+    $firstNameError = "";
 
 //prevent sql injection
-    if ( isset($_POST['register']) ) {
+    if (isset($_POST['register'])) {
     
     $firstName = trim($_POST['firstName']);
     $firstName = strip_tags($firstName);
@@ -42,7 +46,7 @@ if (empty($firstName)) {
 }
 
 if (empty($lastName)) {
-    $error = true ;
+    $error = true;
     $lastNameError = "Please enter your full name.";
    } else if (strlen($lastName) < 3) {
     $error = true;
@@ -53,9 +57,9 @@ if (empty($lastName)) {
 }
 
  //basic email validation
-if ( !filter_var($email,FILTER_VALIDATE_EMAIL) ) {
+if (!filter_var($email,FILTER_VALIDATE_EMAIL)) {
   $error = true;
-  $emailError = "Please enter valid email address." ;
+  $emailError = "Please enter valid email address.";
  } else {
   // checks whether the email exists or not
   $query = "SELECT email FROM users WHERE email='$email'";
@@ -73,17 +77,17 @@ if (empty($password)){
   $passwordError = "Please enter password.";
  } else if(strlen($password) < 6) {
   $error = true;
-  $passwordError = "Password must have atleast 6 characters." ;
+  $passwordError = "Password must have atleast 6 characters.";
 }
 
  // password hashing for security
-$passwordword = hash('sha256' , $password);
+$passwordhash = hash('sha256', $password);
 
 
  // if there's no error, continue to signup
 if( !$error ) {
   
-  $query = "INSERT INTO users(firstName, lastName, email, password) VALUES('$firstName', '$lastName', '$email', '$passwordword')";
+  $query = "INSERT INTO users(firstName, lastName, email, password) VALUES('$firstName', '$lastName', '$email', '$passwordhash')";
   $res = mysqli_query($connect, $query);
   
 if ($res) {
@@ -116,14 +120,18 @@ if ($res) {
     <title>Register</title>
   </head>
   <body>
-    <h1>Register here:</h1>
-    <hr />
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-3">
+      <h1>Register:</h1>
+    </div>
+    <div class="col-sm-6">
           
 <?php
-   if ( isset($errMSG) ) {
+   if (isset($errMSG)) {
 ?> 
-    <div  class="alert alert-<?php echo $errTyp ?>" >
-<?php echo  $errMSG; ?>
+    <div class="alert alert-<?php echo $errTyp ?>">
+<?php echo  $errMSG;?>
     </div>
 
 <?php 
@@ -134,29 +142,34 @@ if ($res) {
             <div class="form-group">
                 <label for="firstName">First Name</label>
                 <input type="text" class="form-control" name="firstName" id="firstName" placeholder="First Name">
-                <span   class = "text-danger" > <? isset($firstNameError); ?> </span >
+                <span class ="text-danger"><?= $firstNameError ?></span>
             </div>
             <div class="form-group">
                 <label for="lastName">Last Name</label>
                 <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last Name">
-                <span   class = "text-danger" > <? isset($lastNameError); ?> </span >
+                <span class = "text-danger"><?= $lastNameError ?></span>
             </div>
 
             <div class="form-group">
                 <label for="email">Email address</label>
                 <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
-                <span   class = "text-danger" > <? isset($emailError); ?> </span >
+                <span class="text-danger"><?= $emailError ?></span>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-                <span   class = "text-danger" > <? isset($passwordError); ?> </span >
+                <span class ="text-danger"><?= $passwordError ?></span>
             </div>
 
             <button type="submit" value="register" name="register" class="btn btn-primary">Register</button>
-        </form>
-        <a href="login.php"><button type="submit" value="login" class="btn btn-primary">Got to Login</button></a>
+        </form><br>
+        <a href="index.php"><button type="submit" value="login" class="btn btn-primary">Got to Login</button></a>
+      </div>
+      <div class="col-sm-3">
 
+      </div>
+    </div>
+  </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -164,6 +177,7 @@ if ($res) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="script-ajax.js" type="text/javascript"></script> -->
+
   </body>
 </html>
 <?php  ob_end_flush(); ?>
