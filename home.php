@@ -9,10 +9,6 @@
 //  exit;
 // }
 
- VALUES (
-   '$product_name',
-   $product_price,
-   '$product_cat',
 // if(isset($_POST['add'])){
 
 //   $product_name = isset($_POST['product_name']);
