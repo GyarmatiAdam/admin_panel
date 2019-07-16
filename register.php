@@ -16,6 +16,8 @@ include_once "dbconnection.php";
 
 //prevent sql injection
     if (isset($_POST['register'])) {
+
+
     
     $firstName = trim($_POST['firstName']);
     $firstName = strip_tags($firstName);
