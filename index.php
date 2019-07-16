@@ -40,10 +40,11 @@ if(isset($_POST['login'])) {
   
   $passhash = hash('sha256', $pass);
 
-  $res=mysqli_query($connect, "SELECT user_id, username, `pass` FROM users WHERE email='$email'");
+  $res=mysqli_query($connect, "SELECT user_id, email, pass FROM users WHERE email='$email'");
 
   $row=mysqli_fetch_array($res, MYSQLI_ASSOC);
-  $count = mysqli_num_rows($res);
+  $count=mysqli_num_rows($res);
+ echo $row;
   echo $passhash."<br>";
   echo $row["pass"];
   if( $count == 1 && $row['pass'] == $passhash ) {
@@ -91,7 +92,7 @@ if(isset($_POST['login'])) {
                 <span class ="text-danger"><?= $emailError ?></span>
             </div>
             <div class="form-group">
-                <label for="password">pass</label>
+                <label for="password">Password</label>
                 <input type="password"  name="pass" class="form-control" placeholder="password">
                 <span class ="text-danger"><?= $passError ?></span>
             </div>

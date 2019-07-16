@@ -3,50 +3,37 @@
  session_start();
 require_once 'dbconnection.php';
 
-// log user out if logout button clicked
-if (isset($_GET['logout'])) {
-	session_destroy();
-	unset($_SESSION['user']);
-	header("location: index.php");
-}
+// if(isset($_POST['add'])){
 
-//if session is not set this will redirect to login page
-if( !isset($_SESSION['user']) ) {
- header("Location: index.php");
- exit;
-}
-
-if(isset($_POST['add'])){
-
-  $product_name = isset($_POST['product_name']);
-  $product_price = isset($_POST['product_price']);
-  $product_cat = isset($_POST['product_cat']);
-  $product_details = isset($_POST['product_details']);
+//   $product_name = isset($_POST['product_name']);
+//   $product_price = isset($_POST['product_price']);
+//   $product_cat = isset($_POST['product_cat']);
+//   $product_details = isset($_POST['product_details']);
   
-  $sql = "INSERT INTO products 
-  (product_name, 
-  product_price, 
-  product_cat, 
-  product_details)
-  VALUES (
-    '$product_name',
-    $product_price,
-    '$product_cat',
-    '$product_details'
-  );";
+//   $sql = "INSERT INTO products 
+//   (product_name, 
+//   product_price, 
+//   product_cat, 
+//   product_details)
+//   VALUES (
+//     '$product_name',
+//     $product_price,
+//     '$product_cat',
+//     '$product_details'
+//   );";
 
-  if (mysqli_query($connect, $sql)) {
-      echo "<h1 class'alert alert-success'>You added a new product.<h1>";
-  }
+//   if (mysqli_query($connect, $sql)) {
+//       echo "<h1 class'alert alert-success'>You added a new product.<h1>";
+//   }
 
- else {
-      echo "<h1 class'alert alert-danger'>Error by: </h1>" . 
-          "<p>"  . $sql . "</p>" . 
-          mysqli_error($connect);
-  }
-}
-  mysqli_close($connect);
-  echo  "</body></html>";
+//  else {
+//       echo "<h1 class'alert alert-danger'>Error by: </h1>" . 
+//           "<p>"  . $sql . "</p>" . 
+//           mysqli_error($connect);
+//   }
+// }
+//   mysqli_close($connect);
+//   echo  "</body></html>";
 ?>
 
 <!doctype html>
@@ -112,5 +99,5 @@ if(isset($_POST['add'])){
   </body>
 </html>
 <?php
- ob_end_flush(); 
+ //ob_end_flush(); 
  ?> 
