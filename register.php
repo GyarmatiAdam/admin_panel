@@ -2,8 +2,9 @@
 ob_start();
 session_start();
 
-if(isset($_SESSION['user'])!=""){
+if(isset($_SESSION['user']) || isset($_SESSION['admin'])){
  header("Location: home.php");
+ 
 }
 
 include_once "dbconnection.php";
@@ -89,7 +90,7 @@ $passhash = hash('sha256', $pass);
  // if there's no error, continue to signup
 if( !$error ) {
   
-  $query = "INSERT INTO users(firstName, lastName, email, pass) VALUES('$firstName', '$lastName', '$email', '$passhash')";
+  $query = "INSERT INTO users(firstName, lastName, email, pass, privilege) VALUES('$firstName', '$lastName', '$email', '$passhash', 0)";
   $res = mysqli_query($connect, $query);
   
 if ($res) {

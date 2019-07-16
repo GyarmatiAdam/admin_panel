@@ -3,6 +3,11 @@
  session_start();
 require_once 'dbconnection.php';
 
+if(!isset($_SESSION["admin"]) && !isset($_SESSION["user"])){
+  header("Location: index.php");
+}
+
+
 // if(isset($_POST['add'])){
 
 //   $product_name = isset($_POST['product_name']);
@@ -73,6 +78,14 @@ require_once 'dbconnection.php';
       </div>
 
       <button type="submit" value="add" id="add" name="add" class="btn btn-primary">Add product</button>
+<!-- if session is admin those buttons are visible -->
+  <?php
+  if (isset($_SESSION['admin'])){
+
+     echo "<button type='submit' value=delete id='delete' name='delete' class='btn btn-primary'>Delete product</button>";
+     echo '<button type="submit" value="update" id="update" name="update" class="btn btn-primary">Add product</button>';
+  }
+  ?>
     </form><br>
     <!-- insert xml and txt files into php page with javascript -->
     <button type="submit" value="add" id="displaytxt" name="displaytxt" class="btn btn-primary">Display txt</button>
@@ -99,5 +112,5 @@ require_once 'dbconnection.php';
   </body>
 </html>
 <?php
- //ob_end_flush(); 
+ ob_end_flush(); 
  ?> 

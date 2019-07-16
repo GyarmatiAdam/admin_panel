@@ -40,7 +40,7 @@ if(isset($_POST['login'])) {
   
   $passhash = hash('sha256', $pass);
 
-  $res=mysqli_query($connect, "SELECT user_id, email, pass FROM users WHERE email='$email'");
+  $res=mysqli_query($connect, "SELECT user_id, email, pass, privilege FROM users WHERE email='$email'");
 
   $row=mysqli_fetch_array($res, MYSQLI_ASSOC);
   $count=mysqli_num_rows($res);
@@ -48,8 +48,15 @@ if(isset($_POST['login'])) {
   echo $passhash."<br>";
   echo $row["pass"];
   if( $count == 1 && $row['pass'] == $passhash ) {
-   $_SESSION['user'] = $row['user_id'];
+    //privilege 1 is admin
+    if($row["privilege"] == 1){
+      $_SESSION["admin"]= $row['user_id'];
+      header("Location: home.php");
+    }else {
+      $_SESSION['user'] = $row['user_id'];
    header("Location: home.php");
+    }
+   
   } else {
    $errMSG = "Incorrect Credentials, Try again..." ;
   }

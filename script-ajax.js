@@ -50,25 +50,17 @@ $("#email").keyup(function(){
   if (!filter.test(email)) {
 
     $("#error_email").text(email+" is not a valid email");
-    email.focus;
-
+    //email.focus;
  }
- else if(!empty(email)) {
-
-  $("#error_email").text("");
-  email.focus;
-}
  else {
-
      $("#error_email").text("");
-
  }
 });
 
 //prevent from submission
 $("#submit-register").click(function(){
   var email = $("#email").val();
-  var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-]))+\.([a-zA-Z0-9]{2,4})+$/;
   if (!filter.test(email)) {
      alert('The email address you provide is not valid');
      $("#email").focus();
