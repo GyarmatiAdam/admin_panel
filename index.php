@@ -41,6 +41,7 @@ if(isset($_POST['login'])) {
   $passhash = hash('sha256', $pass);
 
   $res=mysqli_query($connect, "SELECT user_id, username, `pass` FROM users WHERE email='$email'");
+
   $row=mysqli_fetch_array($res, MYSQLI_ASSOC);
   $count = mysqli_num_rows($res);
   echo $passhash."<br>";
@@ -68,7 +69,7 @@ if(isset($_POST['login'])) {
 
     <title>Login</title>
   </head>
-  <body>
+  <body style="margin-top: 5rem">
   <div class="container">
   <div class="row">
     <div class="col-sm-3">

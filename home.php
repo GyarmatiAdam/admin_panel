@@ -1,45 +1,52 @@
 <?php
  ob_start();
  session_start();
-//require_once 'dbconnection.php';
+require_once 'dbconnection.php';
 
-// if session is not set this will redirect to login page
-// if( !isset($_SESSION['user']) ) {
-//  header("Location: index.php");
-//  exit;
-// }
+// log user out if logout button clicked
+if (isset($_GET['logout'])) {
+	session_destroy();
+	unset($_SESSION['user']);
+	header("location: index.php");
+}
 
-// if(isset($_POST['add'])){
+//if session is not set this will redirect to login page
+if( !isset($_SESSION['user']) ) {
+ header("Location: index.php");
+ exit;
+}
 
-//   $product_name = isset($_POST['product_name']);
-//   $product_price = isset($_POST['product_price']);
-//   $product_cat = isset($_POST['product_cat']);
-//   $product_details = isset($_POST['product_details']);
+if(isset($_POST['add'])){
+
+  $product_name = isset($_POST['product_name']);
+  $product_price = isset($_POST['product_price']);
+  $product_cat = isset($_POST['product_cat']);
+  $product_details = isset($_POST['product_details']);
   
-//   $sql = "INSERT INTO products 
-//   (product_name, 
-//   product_price, 
-//   product_cat, 
-//   product_details)
-//   VALUES (
-//     '$product_name',
-//     $product_price,
-//     '$product_cat',
-//     '$product_details'
-//   );";
+  $sql = "INSERT INTO products 
+  (product_name, 
+  product_price, 
+  product_cat, 
+  product_details)
+  VALUES (
+    '$product_name',
+    $product_price,
+    '$product_cat',
+    '$product_details'
+  );";
 
-//   if (mysqli_query($connect, $sql)) {
-//       echo "<h1 class'alert alert-success'>You added a new product.<h1>";
-//   }
+  if (mysqli_query($connect, $sql)) {
+      echo "<h1 class'alert alert-success'>You added a new product.<h1>";
+  }
 
-//  else {
-//       echo "<h1 class'alert alert-danger'>Error by: </h1>" . 
-//           "<p>"  . $sql . "</p>" . 
-//           mysqli_error($connect);
-//   }
-// }
-//   mysqli_close($connect);
-//   echo  "</body></html>";
+ else {
+      echo "<h1 class'alert alert-danger'>Error by: </h1>" . 
+          "<p>"  . $sql . "</p>" . 
+          mysqli_error($connect);
+  }
+}
+  mysqli_close($connect);
+  echo  "</body></html>";
 ?>
 
 <!doctype html>
@@ -48,7 +55,6 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="script-ajax.js" type="text/javascript"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -57,15 +63,15 @@
 
     <title>Home</title>
   </head>
-  <body>
+  <body style="margin-top: 5rem">
   <div class="container">
   <div class="row">
-    <div class="col-sm-3">
+    <div class="col-sm-2">
       <h1>Welcome</h1>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-8">
 
-    <form id="myForm" action="server-side.php" method="POST">
+    <form id="insertForm">
       <div class="form-group">
         <input type="text" class="form-control" name="product_name" placeholder="Name">
       </div>
@@ -80,10 +86,17 @@
       </div>
 
       <button type="submit" value="add" id="add" name="add" class="btn btn-primary">Add product</button>
-    </form>
+    </form><br>
+    <!-- insert xml and txt files into php page with javascript -->
+    <button type="submit" value="add" id="displaytxt" name="displaytxt" class="btn btn-primary">Display txt</button>
+    <button type="submit" onclick="loadDoc()" id="displayxml" name="displayxml" class="btn btn-primary">Display xml</button><br>
+    <hr>
+    <div  class="text-justify text-success" id="message2"><p></p></div><br>
+    <table  class="table table-dark" id="message3"> </table>
+    <hr>
     <span id="message"></span>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-2">
     <a  href="logout.php?logout">Sign Out</a>
         </div>
       </div>
@@ -99,5 +112,5 @@
   </body>
 </html>
 <?php
- //ob_end_flush(); 
+ ob_end_flush(); 
  ?> 
