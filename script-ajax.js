@@ -69,27 +69,25 @@ $("#submit-register").click(function(){
      
   }
 });
-
-// var request;
-// $("#insertForm").submit(function (e) { 
-//        e.preventDefault();
-
-//        if(request){
-//               request.abort();
-//        }
-//        var $form = $(this);
-//        var $inputs = $form.find("input, button");
-//        var serializedData = $form.serialize();
-
-//        $inputs.prop("disabled", true);
-
-//        request = $.ajax({
-//               type: "method",
-//               url: "url",
-//               data: "data",
-//               dataType: "dataType",
-//               success: function (response) {
-                     
-//               }
-//        });
-// });
+////////////////inser into//////
+$(document).ready(function(){
+  $("#add").click(function(){
+      var name=$("#product_name").val();
+      var price=$("#product_price").val();
+      var category=$("#product_cat").val();
+      var details=$("#product_details").val();
+      $.ajax({
+          url:'insert.php',
+          method:'POST',
+          data:{
+              name:name,
+              product_price:price,
+              product_cat:category,
+              product_details:details
+          },
+         success:function(data){
+             alert(data);
+         }
+      });
+  });
+});
